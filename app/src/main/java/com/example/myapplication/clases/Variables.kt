@@ -3,14 +3,14 @@ package com.example.myapplication.clases
 //class Variables {
 fun main() {
     //Variables numericas
-    val age:Int = 21
-    val long_number:Long = 789324789347
-    val temperature:Float = 27.123f
-    val weight:Double = 60.4
+    val age: Int = 21
+    val long_number: Long = 789324789347
+    val temperature: Float = 27.123f
+    val weight: Double = 60.4
 
     //Variables string
-    val gender:Char = 'M'
-    val name:String = "Gerardo López López"
+    val gender: Char = 'M'
+    val name: String = "Gerardo López López"
 
     //Boleanos
     //val isGreater:Boolean false
@@ -21,17 +21,17 @@ fun main() {
     println(age)
     println("Welcome $name, to your first kotlin project")
     println(add())
-    println(product(10,92))
+    println(product(10, 92))
     printArray(names)
 
     println(names.joinToString())
 
     println(" ")
-    val numbers = arrayOf(1,2,3,4,5,6,7,8,9)
+    val numbers = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
     isEven(numbers)
     println(getDay(4))
 
-    val person = Person("Andres",22)
+    val person = Person("Andres", 22)
 
     println(" ")
     println(person.name)
@@ -40,26 +40,27 @@ fun main() {
     person.displayInformation()
 }
 
-fun add():Int{
+fun add(): Int {
     val x = 5
     val y = 10
 
     return x + y
 }
 
-fun product(x:Int, y:Int):Int{
+fun product(x: Int, y: Int): Int {
     return x + y
 }
+
 //(nombreDato:Array<Tipo de array>)
-fun printArray(names:Array<String>){
-    for(name in names){
+fun printArray(names: Array<String>) {
+    for (name in names) {
         println("Hello $name")
     }
 }
 
-fun isEven(numbers:Array<Int>){
-    for (number in numbers){
-        if (number % 2 == 0){
+fun isEven(numbers: Array<Int>) {
+    for (number in numbers) {
+        if (number % 2 == 0) {
             println("The number $number is Even")
         } else {
             println("The number $number is Odd")
@@ -67,10 +68,10 @@ fun isEven(numbers:Array<Int>){
     }
 }
 
-fun getDay(day:Int): String {
+fun getDay(day: Int): String {
     var name = ""
 
-    when(day){
+    when (day) {
         //Cuando dia = 1
         1 -> name = "Monday"
         2 -> name = "Thusday"
@@ -85,8 +86,8 @@ fun getDay(day:Int): String {
     return name
 }
 
-class Person (val name: String, val age: Int){
-    fun displayInformation(){
+class Person(val name: String, val age: Int) {
+    fun displayInformation() {
         println("Name: $name, Age: $age")
     }
 }

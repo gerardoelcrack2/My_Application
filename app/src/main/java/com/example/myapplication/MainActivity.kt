@@ -57,7 +57,7 @@ import com.example.myapplication.ui.screens.HomeScreen
 import com.example.myapplication.ui.screens.MenuScreen
 
 //import androidx.navigation.compose.NavHostController
-
+//Prueba de rama
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

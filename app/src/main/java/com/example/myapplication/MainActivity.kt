@@ -383,7 +383,8 @@ fun CustomBottomBar() {
         bottomBar = {
             BottomAppBar(
                 containerColor = colorResource(R.color.BottomAppBar_color),
-                contentColor = Color.White
+                contentColor = Color.White,
+                modifier = Modifier.height(64.dp) // Ajusta la altura de la barra inferior
             ) {
                 Row(
                     modifier = Modifier
@@ -442,7 +443,7 @@ fun CustomBottomBar() {
                     Text(
                         text = "HAZTE PRO",
                         color = colorResource(R.color.orange),
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
@@ -510,7 +511,7 @@ fun CustomBottomBar() {
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
-                                        4.dp,
+                                        2.dp,
                                         colorResource(R.color.orange)
                                     ), // Aro naranja solo en la imagen
                                     CircleShape
@@ -539,7 +540,7 @@ fun CustomBottomBar() {
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
-                                        4.dp,
+                                        2.dp,
                                         colorResource(R.color.orange)
                                     ), // Aro naranja solo en la imagen
                                     CircleShape
@@ -568,7 +569,7 @@ fun CustomBottomBar() {
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
-                                        4.dp,
+                                        2.dp,
                                         colorResource(R.color.orange)
                                     ), // Aro naranja solo en la imagen
                                     CircleShape
@@ -597,7 +598,7 @@ fun CustomBottomBar() {
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
-                                        4.dp,
+                                        2.dp,
                                         colorResource(R.color.orange)
                                     ), // Aro naranja solo en la imagen
                                     CircleShape
@@ -626,7 +627,7 @@ fun CustomBottomBar() {
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
-                                        4.dp,
+                                        2.dp,
                                         colorResource(R.color.orange)
                                     ), // Aro naranja solo en la imagen
                                     CircleShape
@@ -655,7 +656,7 @@ fun CustomBottomBar() {
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
-                                        4.dp,
+                                        2.dp,
                                         colorResource(R.color.orange)
                                     ), // Aro naranja solo en la imagen
                                     CircleShape
@@ -689,7 +690,7 @@ fun CustomBottomBar() {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .width(320.dp), // Tamaño de la tarjeta
+                            .width(300.dp), // Tamaño de la tarjeta
                         verticalArrangement = Arrangement.spacedBy(16.dp) // Espaciado entre elementos
                     ) {
                         // Primer elemento "Pistas que me gustan"
@@ -713,12 +714,16 @@ fun CustomBottomBar() {
                                         text = "Pistas que me gustan",
                                         color = Color.White,
                                         fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                     Text(
                                         text = "gerardoelcrack2",
                                         color = Color.Gray,
-                                        fontSize = 14.sp
+                                        fontSize = 14.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                             }
@@ -732,7 +737,7 @@ fun CustomBottomBar() {
                                 // Imagen
                                 Image(
                                     painter = painterResource(id = R.drawable.marshmello_icon), // Cambia por el recurso correspondiente
-                                    contentDescription = "Marshmello X Ray Volpe",
+                                    contentDescription = "MARSHMELLO X RAY VOLPE - OLD SCHOOL",
                                     modifier = Modifier
                                         .size(60.dp)
                                         .clip(RoundedCornerShape(2.dp)) // Esquina redondeada
@@ -742,15 +747,19 @@ fun CustomBottomBar() {
                                 // Texto
                                 Column {
                                     Text(
-                                        text = "MARSHMELLO X RAY VOLPE",
+                                        text = "MARSHMELLO X RAY VOLPE - OLD SCHOOL",
                                         color = Color.White,
                                         fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                     Text(
                                         text = "RAY VOLPE \uD83E\uDD16 - Lista",
                                         color = Color.Gray,
-                                        fontSize = 14.sp
+                                        fontSize = 14.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                             }
@@ -762,7 +771,7 @@ fun CustomBottomBar() {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .width(320.dp), // Tamaño de la tarjeta
+                            .width(300.dp), // Tamaño de la tarjeta
                         verticalArrangement = Arrangement.spacedBy(16.dp) // Espaciado entre elementos
                     ) {
                         item {
@@ -785,12 +794,16 @@ fun CustomBottomBar() {
                                         text = "Your Mix 1",
                                         color = Color.White,
                                         fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                     Text(
                                         text = "Diseñado para gerardoelcrack2",
                                         color = Color.Gray,
-                                        fontSize = 14.sp
+                                        fontSize = 14.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                             }
@@ -833,7 +846,7 @@ fun CustomBottomBar() {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .width(320.dp), // Tamaño de la tarjeta
+                            .width(300.dp), // Tamaño de la tarjeta
                         verticalArrangement = Arrangement.spacedBy(16.dp) // Espaciado entre elementos
                     ) {
                         item {
@@ -891,7 +904,9 @@ fun CustomBottomBar() {
                                         text = "Disciple - We Don't Play",
                                         color = Color.White,
                                         fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                     Text(
                                         text = "Disciple ♛ ♜ ♞, Virtual Riot, Stabby, MUST DIE!",

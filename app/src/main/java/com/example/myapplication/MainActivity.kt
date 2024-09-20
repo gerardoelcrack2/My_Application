@@ -37,6 +37,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -370,14 +371,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Content()
+            CustomBottomBar()
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Content() {
+fun CustomBottomBar() {
     Scaffold(
         bottomBar = {
             BottomAppBar(
@@ -385,54 +386,36 @@ fun Content() {
                 contentColor = Color.White
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp), // Padding para el contenido de la barra
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(
-                            painterResource(id = R.drawable.baseline_home_filled_24),
-                            contentDescription = "Home",
-                            tint = colorResource(R.color.TopAppBar_icons_color),
-                            modifier = Modifier
-                                .size(30.dp)
-                        )
-                    }
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(
-                            painterResource(id = R.drawable.baseline_subscriptions_24),
-                            contentDescription = "Friends",
-                            tint = colorResource(R.color.TopAppBar_icons_color),
-                            modifier = Modifier
-                                .size(30.dp)
-                        )
-                    }
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search",
-                            tint = colorResource(R.color.TopAppBar_icons_color),
-                            modifier = Modifier
-                                .size(30.dp)
-                        )
-                    }
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(
-                            painterResource(id = R.drawable.baseline_library_music_24),
-                            contentDescription = "Library",
-                            tint = colorResource(R.color.TopAppBar_icons_color),
-                            modifier = Modifier
-                                .size(30.dp)
-                        )
-                    }
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(
-                            painterResource(id = R.drawable.baseline_cloud_24),
-                            contentDescription = "Library",
-                            tint = colorResource(R.color.TopAppBar_icons_color),
-                            modifier = Modifier
-                                .size(30.dp)
-                        )
-                    }
+                    BottomBarItem(
+                        iconRes = R.drawable.baseline_home_filled_24,
+                        label = "Inicio",
+                        modifier = Modifier.weight(1f)
+                    )
+                    BottomBarItem(
+                        iconRes = R.drawable.baseline_subscriptions_24,
+                        label = "Canal",
+                        modifier = Modifier.weight(1f)
+                    )
+                    BottomBarItem(
+                        iconRes = R.drawable.outline_search_24,
+                        label = "Buscar",
+                        modifier = Modifier.weight(1f)
+                    )
+                    BottomBarItem(
+                        iconRes = R.drawable.baseline_library_music_24,
+                        label = "Biblioteca",
+                        modifier = Modifier.weight(1f)
+                    )
+                    BottomBarItem(
+                        iconRes = R.drawable.baseline_cloud_24,
+                        label = "Upgrade",
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }
@@ -523,7 +506,7 @@ fun Content() {
                             painter = painterResource(id = R.drawable.san_holo),
                             contentDescription = "Artist Avatar",
                             modifier = Modifier
-                                .size(90.dp)
+                                .size(80.dp)
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
@@ -552,7 +535,7 @@ fun Content() {
                             painter = painterResource(id = R.drawable.deadmau5),
                             contentDescription = "Friend Avatar",
                             modifier = Modifier
-                                .size(90.dp)
+                                .size(80.dp)
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
@@ -581,7 +564,7 @@ fun Content() {
                             painter = painterResource(id = R.drawable.german_hardstyle_uploadz),
                             contentDescription = "Friend Avatar",
                             modifier = Modifier
-                                .size(90.dp)
+                                .size(80.dp)
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
@@ -610,7 +593,7 @@ fun Content() {
                             painter = painterResource(id = R.drawable.zomboy),
                             contentDescription = "Friend Avatar",
                             modifier = Modifier
-                                .size(90.dp)
+                                .size(80.dp)
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
@@ -639,7 +622,7 @@ fun Content() {
                             painter = painterResource(id = R.drawable.crankdat),
                             contentDescription = "Friend Avatar",
                             modifier = Modifier
-                                .size(90.dp)
+                                .size(80.dp)
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
@@ -668,7 +651,7 @@ fun Content() {
                             painter = painterResource(id = R.drawable.doctor_p),
                             contentDescription = "Friend Avatar",
                             modifier = Modifier
-                                .size(90.dp)
+                                .size(80.dp)
                                 .clip(CircleShape)
                                 .border(
                                     BorderStroke(
@@ -701,10 +684,12 @@ fun Content() {
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // Primer columna de "Escuchadas recientemente"
                 item {
                     LazyColumn(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .width(320.dp), // Tamaño de la tarjeta
                         verticalArrangement = Arrangement.spacedBy(16.dp) // Espaciado entre elementos
                     ) {
                         // Primer elemento "Pistas que me gustan"
@@ -772,10 +757,12 @@ fun Content() {
                         }
                     }
                 }
+                // Segunda columna de "Escuchadas recientemente"
                 item {
                     LazyColumn(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .width(320.dp), // Tamaño de la tarjeta
                         verticalArrangement = Arrangement.spacedBy(16.dp) // Espaciado entre elementos
                     ) {
                         item {
@@ -835,6 +822,83 @@ fun Content() {
                                         text = "RAY VOLPE \uD83E\uDD16",
                                         color = Color.Gray,
                                         fontSize = 14.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                // Tercera columna de "Escuchadas recientemente"
+                item {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .width(320.dp), // Tamaño de la tarjeta
+                        verticalArrangement = Arrangement.spacedBy(16.dp) // Espaciado entre elementos
+                    ) {
+                        item {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Imagen
+                                Image(
+                                    painter = painterResource(id = R.drawable.pistas_similares), // Cambia por el recurso correspondiente
+                                    contentDescription = "Your Mix 1",
+                                    modifier = Modifier
+                                        .size(60.dp)
+                                        .clip(RoundedCornerShape(2.dp)) // Esquina redondeada
+                                )
+                                Spacer(modifier = Modifier.width(16.dp))
+
+                                // Texto
+                                Column {
+                                    Text(
+                                        text = "Tame Impala x Justin Timberlake - The Less I Know The Better & Sexy Back (Mashup) (Extended Version)",
+                                        color = Color.White,
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                    Text(
+                                        text = "HyperMashup! (by CubixyBlue), takumi nightcore second stage, Ross Martin, asabakaev",
+                                        color = Color.Gray,
+                                        fontSize = 14.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                        }
+
+                        item {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Imagen
+                                Image(
+                                    painter = painterResource(id = R.drawable.disciple_we_dont_play), // Cambia por el recurso correspondiente
+                                    contentDescription = "Disciple - We Don't Play",
+                                    modifier = Modifier
+                                        .size(60.dp)
+                                        .clip(RoundedCornerShape(2.dp)) // Esquina redondeada
+                                )
+                                Spacer(modifier = Modifier.width(16.dp))
+
+                                // Texto
+                                Column {
+                                    Text(
+                                        text = "Disciple - We Don't Play",
+                                        color = Color.White,
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = "Disciple ♛ ♜ ♞, Virtual Riot, Stabby, MUST DIE!",
+                                        color = Color.Gray,
+                                        fontSize = 14.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                             }
@@ -1093,7 +1157,7 @@ fun Content() {
                     }
                 }
 
-                item{
+                item {
                     Text(
                         text = "Introducing Buzzing",
                         color = Color.White,
@@ -1339,5 +1403,28 @@ fun Content() {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun BottomBarItem(iconRes: Int, label: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .clickable { /* Acción al hacer clic */ },
+        horizontalAlignment = Alignment.CenterHorizontally, // Alinea ícono y texto al centro
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = label,
+            tint = colorResource(R.color.TopAppBar_icons_color),
+            modifier = Modifier.size(24.dp) // Tamaño del ícono
+        )
+        Spacer(modifier = Modifier.height(4.dp)) // Espacio entre ícono y texto
+        Text(
+            text = label,
+            color = Color.White,
+            fontSize = 12.sp // Tamaño de texto ajustable
+        )
     }
 }

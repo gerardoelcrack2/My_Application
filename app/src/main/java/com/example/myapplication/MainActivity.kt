@@ -381,12 +381,12 @@ class MainActivity : ComponentActivity() {
 fun CustomBottomBar() {
     Scaffold(
         bottomBar = {
-            BottomAppBar(
+            BottomAppBar( // Barra inferior de la aplicación (bottom bar)
                 containerColor = colorResource(R.color.BottomAppBar_color),
                 contentColor = Color.White,
                 modifier = Modifier.height(64.dp) // Ajusta la altura de la barra inferior
             ) {
-                Row(
+                Row( // Elementos de la barra inferior
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp), // Padding para el contenido de la barra
@@ -421,13 +421,13 @@ fun CustomBottomBar() {
             }
         }
     ) { innerPadding ->
-        Column(
+        Column( // Barra superior de la aplicación (top bar)
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black)
                 .padding(innerPadding)
         ) {
-            Row(
+            Row( // Elementos de la barra superior
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -483,7 +483,7 @@ fun CustomBottomBar() {
                             .align(Alignment.CenterVertically)
                     )
                 }
-            }
+            } // Separador de sección
             Text(
                 text = "Nuevas pistas",
                 color = Color.White,
@@ -496,7 +496,7 @@ fun CustomBottomBar() {
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp) // Espaciado de 16dp entre los elementos
-            ) {
+            ) { // Sección de historias de artistas
                 item {
                     Column(
                         modifier = Modifier
@@ -671,14 +671,14 @@ fun CustomBottomBar() {
                         )
                     }
                 }
-            }
+            } // Separador de sección
             Text(
                 text = "Escuchadas recientemente",
                 color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(10.dp)
-            )
+            ) // Sección de pistas recientes
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -20,11 +20,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -81,6 +83,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,6 +98,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import com.example.myapplication.R
+import com.example.myapplication.data.model.MenuModel
 import com.example.myapplication.data.model.PostModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -105,7 +109,21 @@ import java.util.logging.Filter
 
 @Composable
 fun ComponentsScreen(navController: NavController) {
-    var component by remember { mutableStateOf("") } //actualiza el valor de la variable en la interfaz
+    val menuOptions = arrayOf(
+        MenuModel(1, "Buttons", "buttons", Icons.Filled.AccountBox),
+        MenuModel(2, "Floating Buttons", "floating-buttons", Icons.Filled.DateRange),
+        MenuModel(3, "Chips", "chips", Icons.Filled.AccountBox),
+        MenuModel(4, "Progress", "progress", Icons.Filled.AccountBox),
+        MenuModel(5, "Sliders", "sliders", Icons.Filled.AccountBox),
+        MenuModel(6, "Switches", "switches", Icons.Filled.AccountBox),
+        MenuModel(7, "Badges", "badges", Icons.Filled.AccountBox),
+        MenuModel(8, "Date Pickers", "date-pickers", Icons.Filled.AccountBox),
+        MenuModel(9, "Time Pickers", "time-pickers", Icons.Filled.AccountBox),
+        MenuModel(10, "Snack Bars", "snack-bars", Icons.Filled.AccountBox),
+        MenuModel(11, "Alert Dialogs", "alert-dialogs", Icons.Filled.AccountBox),
+        MenuModel(12, "Bars", "bars", Icons.Filled.AccountBox)
+    )
+    var component by rememberSaveable { mutableStateOf("") }//actualizar el valor de la variable en la interfaz
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
@@ -115,201 +133,29 @@ fun ComponentsScreen(navController: NavController) {
             ModalDrawerSheet {
                 Text("Drawer title", modifier = Modifier.padding(16.dp))
                 HorizontalDivider()
-                NavigationDrawerItem(
-                    label = { Text("Content 1") },
-                    selected = false,
-                    onClick = {
-                        component = "Content1"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
+                LazyColumn {
+                    items(menuOptions) { item ->
+                        NavigationDrawerItem(
+                            icon = { Icon(item.icon, contentDescription = "") },
+                            label = { Text(text = item.title) },
+                            selected = false,
+                            onClick = {
+                                component = item.option
+                                scope.launch {
+                                    drawerState.apply {
+                                        close()
+                                    }
+                                }
                             }
-                        }
+                        )
                     }
-                )
-                // Content 2
-                NavigationDrawerItem(
-                    label = { Text("Content 2") },
-                    selected = false,
-                    onClick = {
-                        component = "Content2"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //Buttons
-                NavigationDrawerItem(
-                    label = { Text(text = "Buttons") },
-                    selected = false,
-                    onClick = {
-                        component = "Buttons"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //Floating A Buttons
-                NavigationDrawerItem(
-                    label = { Text(text = "Floating Buttons") },
-                    selected = false,
-                    onClick = {
-                        component = "floating-buttons"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //Chips
-                NavigationDrawerItem(
-                    label = { Text(text = "Chips") },
-                    selected = false,
-                    onClick = {
-                        component = "chips"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //Progress
-                NavigationDrawerItem(
-                    label = { Text(text = "Progress") },
-                    selected = false,
-                    onClick = {
-                        component = "progress"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //Sliders
-                NavigationDrawerItem(
-                    label = { Text(text = "Sliders") },
-                    selected = false,
-                    onClick = {
-                        component = "sliders"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //Switches
-                NavigationDrawerItem(
-                    label = { Text(text = "Switches") },
-                    selected = false,
-                    onClick = {
-                        component = "switches"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //Badges
-                NavigationDrawerItem(
-                    label = { Text(text = "Badges") },
-                    selected = false,
-                    onClick = {
-                        component = "badges"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //DatePickers
-                NavigationDrawerItem(
-                    label = { Text(text = "DatePickers") },
-                    selected = false,
-                    onClick = {
-                        component = "date-pickers"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //TimePickers
-                NavigationDrawerItem(
-                    label = { Text(text = "TimePickers") },
-                    selected = false,
-                    onClick = {
-                        component = "time-pickers"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //SnackBars
-                NavigationDrawerItem(
-                    label = { Text(text = "SnackBars") },
-                    selected = false,
-                    onClick = {
-                        component = "snack-bars"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //AlertDialogs
-                NavigationDrawerItem(
-                    label = { Text(text = "AlertDialogs") },
-                    selected = false,
-                    onClick = {
-                        component = "alert-dialogs"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
-                //Bars
-                NavigationDrawerItem(
-                    label = { Text(text = "Bars") },
-                    selected = false,
-                    onClick = {
-                        component = "bars"
-                        scope.launch {
-                            drawerState.apply {
-                                close()
-                            }
-                        }
-                    }
-                )
+                }
             }
         }
     ) {
         //Screen content
         Column {
             when (component) {
-                "Content1" -> {
-                    Content1()
-                }
-
-                "Content2" -> {
-                    Content2()
-                }
-
                 "Buttons" -> {
                     Buttons()
                 }
@@ -365,16 +211,6 @@ fun ComponentsScreen(navController: NavController) {
             }
         }
     }
-}
-
-@Composable
-fun Content1() {
-    Text(text = "Content 1")
-}
-
-@Composable
-fun Content2() {
-    Text(text = "Content 2")
 }
 
 @Preview(showBackground = true)
@@ -808,13 +644,13 @@ fun Bars() {
             PostModel(3, "Title 3", "Text 3"),
             PostModel(4, "Title 4", "Text 4")
         )
-        Column (
+        Column(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(10.dp,90.dp,10.dp,50.dp)
+                .padding(10.dp, 90.dp, 10.dp, 50.dp)
                 .fillMaxSize()
             //.verticalScroll(rememberScrollState())
-        ){Posts(post)}
+        ) { Posts(post) }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -823,57 +659,68 @@ fun Bars() {
                 .background(Color.Black)
                 .padding(2.dp, 5.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
-        ){
+        ) {
             Column {
-                IconButton(onClick = {}, Modifier.size(30.dp))  {
-                    Icon(Icons.Outlined.Home,
+                IconButton(onClick = {}, Modifier.size(30.dp)) {
+                    Icon(
+                        Icons.Outlined.Home,
                         contentDescription = "",
                         tint = Color.White,
-                        modifier = Modifier.fillMaxSize())
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
                 Text(text = "Home", color = Color.White)
             }
             Column {
-                IconButton(onClick = {}, Modifier.size(30.dp))  {
-                    Icon(Icons.Outlined.Favorite,
+                IconButton(onClick = {}, Modifier.size(30.dp)) {
+                    Icon(
+                        Icons.Outlined.Favorite,
                         contentDescription = "",
                         tint = Color.White,
-                        modifier = Modifier.fillMaxSize())
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
                 Text(text = "Favorite", color = Color.White)
             }
             Column {
-                IconButton(onClick = {}, Modifier.size(30.dp))  {
-                    Icon(Icons.Outlined.PlayArrow,
+                IconButton(onClick = {}, Modifier.size(30.dp)) {
+                    Icon(
+                        Icons.Outlined.PlayArrow,
                         contentDescription = "",
                         tint = Color.White,
-                        modifier = Modifier.fillMaxSize())
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
                 Text(text = "Play", color = Color.White)
             }
             Column {
-                IconButton(onClick = {}, Modifier.size(30.dp))  {
-                    Icon(Icons.Outlined.Build,
+                IconButton(onClick = {}, Modifier.size(30.dp)) {
+                    Icon(
+                        Icons.Outlined.Build,
                         contentDescription = "",
                         tint = Color.White,
-                        modifier = Modifier.fillMaxSize())
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
                 Text(text = "Build", color = Color.White)
             }
             Column {
-                IconButton(onClick = {}, Modifier.size(30.dp))  {
-                    Icon(Icons.Outlined.AccountBox,
+                IconButton(onClick = {}, Modifier.size(30.dp)) {
+                    Icon(
+                        Icons.Outlined.AccountBox,
                         contentDescription = "",
                         tint = Color.White,
-                        modifier = Modifier.fillMaxSize())
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
                 Text(text = "Account", color = Color.White)
             }
         }
     }
 }
+
 @Composable
-fun Posts(arrayPosts: Array<PostModel>){
+fun Posts(arrayPosts: Array<PostModel>) {
     //Espera a que llegue la info para que se ejecute
     LazyColumn(
         modifier = Modifier

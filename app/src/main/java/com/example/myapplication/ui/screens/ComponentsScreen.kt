@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,8 +20,12 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Badge
@@ -51,6 +56,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -69,9 +76,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
@@ -235,6 +244,45 @@ fun ComponentsScreen(navController: NavController) {
                         }
                     }
                 )
+                //SnackBars
+                NavigationDrawerItem(
+                    label = { Text(text = "SnackBars") },
+                    selected = false,
+                    onClick = {
+                        component = "snack-bars"
+                        scope.launch {
+                            drawerState.apply {
+                                close()
+                            }
+                        }
+                    }
+                )
+                //AlertDialogs
+                NavigationDrawerItem(
+                    label = { Text(text = "AlertDialogs") },
+                    selected = false,
+                    onClick = {
+                        component = "alert-dialogs"
+                        scope.launch {
+                            drawerState.apply {
+                                close()
+                            }
+                        }
+                    }
+                )
+                //Bars
+                NavigationDrawerItem(
+                    label = { Text(text = "Bars") },
+                    selected = false,
+                    onClick = {
+                        component = "bars"
+                        scope.launch {
+                            drawerState.apply {
+                                close()
+                            }
+                        }
+                    }
+                )
             }
         }
     ) {
@@ -288,6 +336,18 @@ fun ComponentsScreen(navController: NavController) {
                         onDismiss = {
                             println("TimePicker descartado")
                         })
+                }
+
+                "snack-bars" -> {
+                    SnackBars()
+                }
+
+                "alert-dialogs" -> {
+                    AlertDialogs()
+                }
+
+                "bars" -> {
+                    Bars()
                 }
             }
         }
@@ -580,7 +640,7 @@ fun TimePickers(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun DatePickers() {
     var showDatePicker by remember { mutableStateOf(false) }
@@ -634,4 +694,100 @@ fun DatePickers() {
 fun convertMillisToDate(millis: Long): String {
     val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
     return formatter.format(Date(millis))
+}
+
+//@Preview(showBackground = true)
+@Composable
+fun SnackBars() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        val snackState = remember { SnackbarHostState() }
+        val snackScope = rememberCoroutineScope()
+        SnackbarHost(hostState = snackState, Modifier)
+        fun launchSnackbar() {
+            snackScope.launch { snackState.showSnackbar("The message was sent") }
+        }
+        Button(::launchSnackbar) {
+            Text("Show snackbar")
+        }
+    }
+}
+
+//@Preview(showBackground = true)
+@Composable
+fun AlertDialogs() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        var showAlertDialog by remember { mutableStateOf(false) }
+        var selectedOption by remember { mutableStateOf("") }
+        if (showAlertDialog) {
+            AlertDialog(
+                icon = { Icon(Icons.Filled.Warning, "") },
+                title = { Text("Confirm deletion") },
+                text = { Text("Are you sure you want to delete this file=") },
+                onDismissRequest = { },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            selectedOption = "Confirm"
+                            showAlertDialog = false
+                        }
+                    ) {
+                        Text("Confirm")
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            selectedOption = "Dismiss"
+                            showAlertDialog = false
+                        }
+                    ) {
+                        Text("Dismiss")
+                    }
+                }
+            )
+        }
+        Text(selectedOption)
+        Button(onClick = { showAlertDialog = true }) {
+            Text("Show alert dialog")
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun Bars() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.DarkGray)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .background(Color.Black)
+                .padding(10.dp, 50.dp, 10.dp, 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        )
+        {
+            Icon(Icons.Filled.Menu, contentDescription = "", tint = Color.White)
+            Text(
+                text = "App Title",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+            Icon(Icons.Filled.Settings, contentDescription = "", tint = Color.White)
+        }
+    }
 }

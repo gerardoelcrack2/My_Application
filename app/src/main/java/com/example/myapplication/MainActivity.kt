@@ -53,6 +53,7 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.ui.screens.ComponentsScreen
 import com.example.myapplication.ui.screens.HomeScreen
 import com.example.myapplication.ui.screens.MenuScreen
 
@@ -61,7 +62,7 @@ import com.example.myapplication.ui.screens.MenuScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
+        enableEdgeToEdge()
         setContent {
             ComposeMultiScreenApp()
         }
@@ -347,5 +348,6 @@ fun SetupNavGraph(navController: NavHostController){
     NavHost(navController = navController, startDestination = "menu"){
         composable("menu") { MenuScreen(navController) }
         composable("home") { HomeScreen(navController) }
+        composable("components") { ComponentsScreen(navController) }
     }
 }

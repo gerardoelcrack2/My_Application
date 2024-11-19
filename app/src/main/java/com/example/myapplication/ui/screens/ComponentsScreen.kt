@@ -88,6 +88,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TimeInput
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -242,7 +243,7 @@ fun Components(navController: NavController, promptManager: BiometricPromptManag
                 "adaptive" -> {
                     Adaptive()
                 }
-
+                
                 "home-screen" -> {
                     ProfileScreen(navController)
                 }

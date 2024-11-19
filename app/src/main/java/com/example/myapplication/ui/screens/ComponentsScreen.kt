@@ -119,7 +119,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
-import com.example.myapplication.R
 import com.example.myapplication.clases.BiometricPromptManager
 import com.example.myapplication.clases.BiometricPromptManager.BiometricResult
 import com.example.myapplication.ui.screens.ProfileScreen
@@ -129,6 +128,7 @@ import com.example.myapplication.data.model.Reminder
 import com.example.myapplication.ui.components.PostCard
 import com.example.myapplication.ui.components.PostCardCompact
 import com.example.myapplication.ui.viewmodel.ReminderViewModel
+import com.example.project1.R
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar

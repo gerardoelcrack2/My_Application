@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.example.project1"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
-        minSdk = 24
+        applicationId = "com.example.project1"
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.adaptive.android)
+    implementation(libs.appcompat)
     //implementation(libs.androidx.navigation.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -70,11 +71,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("androidx.compose.material3:material3:1.1.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
-    implementation("androidx.core:core-ktx:1.10.0")
-    implementation("androidx.activity:activity-ktx:1.7.0")
+    implementation("androidx.biometric:biometric:1.1.0")
+implementation("androidx.asynclayoutinflater:asynclayoutinflater-appcompat:1.1.0-alpha01")
+implementation("androidx.appcompat:appcompat:1.6.1")
+implementation("androidx.navigation:navigation-compose:2.7.6")
+implementation("androidx.compose.material3:material3:1.1.2")
+implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
+implementation("androidx.work:work-runtime-ktx:2.8.1")
+implementation("androidx.core:core-ktx:1.10.0")
+implementation("androidx.activity:activity-ktx:1.7.0")
+implementation("androidx.activity:activity-compose:1.8.2")
 }

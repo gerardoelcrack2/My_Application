@@ -1,13 +1,20 @@
 package com.example.myapplication.ui.screens
 
-import android.content.res.AssetManager.AssetInputStream
-import android.service.voice.VoiceInteractionSession.AssistState
+import android.os.Build
+import android.content.Intent
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import android.provider.Settings
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,21 +23,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -91,6 +96,8 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -104,10 +111,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -115,22 +120,24 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
-import com.example.myapplication.R
+import com.example.myapplication.clases.BiometricPromptManager
+import com.example.myapplication.clases.BiometricPromptManager.BiometricResult
+import com.example.myapplication.ui.screens.ProfileScreen
 import com.example.myapplication.data.model.MenuModel
 import com.example.myapplication.data.model.PostModel
 import com.example.myapplication.data.model.Reminder
 import com.example.myapplication.ui.components.PostCard
 import com.example.myapplication.ui.components.PostCardCompact
 import com.example.myapplication.ui.viewmodel.ReminderViewModel
+import com.example.project1.R
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.logging.Filter
 
 @Composable
-fun ComponentsScreen(navController: NavController) {
+fun Components(navController: NavController, promptManager: BiometricPromptManager) {
     val menuOptions = arrayOf(
         MenuModel(1, "Buttons", "buttons", Icons.Filled.AccountBox),
         MenuModel(2, "Floating Buttons", "floating-buttons", Icons.Filled.DateRange),
@@ -145,7 +152,7 @@ fun ComponentsScreen(navController: NavController) {
         MenuModel(11, "Alert Dialogs", "alert-dialogs", Icons.Filled.AccountBox),
         MenuModel(12, "Bars", "bars", Icons.Filled.AccountBox),
         MenuModel(13, "Adaptive", "adaptive", Icons.Filled.AccountBox),
-        MenuModel(14, "ReminderApp", "reminder", Icons.Filled.AccountBox)
+        MenuModel(14, "HomeScreen", "home-screen", Icons.Filled.AccountCircle)
     )
     var component by rememberSaveable { mutableStateOf("") }//actualizar el valor de la variable en la interfaz
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -236,16 +243,15 @@ fun ComponentsScreen(navController: NavController) {
                 "adaptive" -> {
                     Adaptive()
                 }
-
-                "reminder" -> {
-                    ReminderApp()
+                
+                "home-screen" -> {
+                    ProfileScreen(navController)
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
 fun Buttons() {
     Column(
@@ -297,7 +303,6 @@ fun FloatingButtons() {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
 fun Chips() {
     Column(
@@ -377,7 +382,6 @@ fun InputChipExample(
     )
 }
 
-@Preview(showBackground = true)
 @Composable
 fun Progress() {
     Column(
@@ -395,7 +399,6 @@ fun Progress() {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
 fun Sliders() {
     Column(
@@ -822,238 +825,97 @@ fun Adaptive() {
     Expanded height > 900dp Tablet in portrait    */
     //Text(text = WindowsSize.toString())
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReminderApp() {
-    val viewModel: ReminderViewModel = viewModel()
-    val reminders by viewModel.reminders.collectAsState()
-    var showDialog by remember { mutableStateOf(false) }
-    var showDatePicker by remember { mutableStateOf(false) }
-    var showTimePicker by remember { mutableStateOf(false) }
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
-    val context = LocalContext.current
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Recordatorios") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
-                Text("+")
+fun HomeScreen(navController : NavController,promptManager: BiometricPromptManager){
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ){
+        LazyColumn{
+            item {
+                profileRow(navController,promptManager)
             }
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-        ) {
-            // Lista de recordatorios
-            items(reminders) { reminder ->
-                ReminderItem(
-                    reminder = reminder,
-                    onDelete = { viewModel.deleteReminder(context, reminder) }
+            items(2){
+                Image(
+                    painter = painterResource(id = R.drawable.android_logo),
+                    contentDescription = "android logo",
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
-        }
-        // agregar recordatorio
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("Nuevo Recordatorio") },
-                text = {
-                    Column {
-                        TextField(
-                            value = title,
-                            onValueChange = { title = it },
-                            label = { Text("Título") }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TextField(
-                            value = description,
-                            onValueChange = { description = it },
-                            label = { Text("Descripción") }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        // Boton para mostrar DatePicker
-                        Button(
-                            onClick = { showDatePicker = true }
-                        ) {
-                            Text(
-                                "Seleccionar Fecha: ${
-                                    SimpleDateFormat(
-                                        "dd/MM/yyyy",
-                                        Locale.getDefault()
-                                    ).format(selectedDate.time)
-                                }"
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        // Boton para mostrar TimePicker
-                        Button(
-                            onClick = { showTimePicker = true }
-                        ) {
-                            Text(
-                                "Seleccionar Hora: ${
-                                    SimpleDateFormat(
-                                        "HH:mm",
-                                        Locale.getDefault()
-                                    ).format(selectedDate.time)
-                                }"
-                            )
-                        }
-                    }
-                },
-                confirmButton = {
-                    Button(onClick = {
-                        viewModel.addReminder(
-                            context,
-                            title,
-                            description,
-                            selectedDate.timeInMillis
-                        )
-                        title = ""
-                        description = ""
-                        showDialog = false
-                    }) {
-                        Text("Guardar")
-                    }
-                },
-                dismissButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("Cancelar")
-                    }
-                }
-            )
-        }
-        // DatePicker
-        if (showDatePicker) {
-            val datePickerState = rememberDatePickerState(
-                initialSelectedDateMillis = selectedDate.timeInMillis
-            )
-            DatePickerDialog(
-                onDismissRequest = { showDatePicker = false },
-                confirmButton = {
-                    TextButton(onClick = {
-                        datePickerState.selectedDateMillis?.let { dateMillis ->
-                            val newDate = Calendar.getInstance().apply {
-                                timeInMillis = dateMillis
-                            }
-                            selectedDate.set(
-                                newDate.get(Calendar.YEAR),
-                                newDate.get(Calendar.MONTH),
-                                newDate.get(Calendar.DAY_OF_MONTH)
-                            )
-                        }
-                        showDatePicker = false
-                    }) {
-                        Text("OK")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDatePicker = false }) {
-                        Text("Cancelar")
-                    }
-                }
-            ) {
-                DatePicker(
-                    state = datePickerState,
-                    showModeToggle = false
-                )
-            }
-        }
-        // TimePicker
-        if (showTimePicker) {
-            TimePickerDialog(
-                onDismissRequest = { showTimePicker = false },
-                onConfirm = { hour, minute ->
-                    selectedDate.set(Calendar.HOUR_OF_DAY, hour)
-                    selectedDate.set(Calendar.MINUTE, minute)
-                    showTimePicker = false
-                }
-            )
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimePickerDialog(
-    onDismissRequest: () -> Unit,
-    onConfirm: (Int, Int) -> Unit
-) {
-    val currentTime = Calendar.getInstance()
-    val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-        initialMinute = currentTime.get(Calendar.MINUTE),
-        is24Hour = true
-    )
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text("Seleccionar hora") },
-        text = {
-            Column(
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TimePicker(state = timePickerState)
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = { onConfirm(timePickerState.hour, timePickerState.minute) }
-            ) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("Cancelar")
-            }
+fun profileRow(navController : NavController,promptManager:BiometricPromptManager){
+    val biometricResult by promptManager.promptResults.collectAsState(initial = null)
+    val enrollLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {
+            println("Activity result: $it")
         }
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ReminderItem(reminder: Reminder, onDelete: () -> Unit) {
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-    Card(
+    LaunchedEffect(biometricResult) {
+        if(biometricResult is BiometricResult.AuthenticationNotSet){
+            if(Build.VERSION.SDK_INT >= 30){
+                val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+                    putExtra(
+                        Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                        BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+                    )
+                }
+                enrollLauncher.launch(enrollIntent)
+            }
+        }
+    }
+    Row(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(10.dp)
+            .border(
+                width = 1.dp,
+                color = Color.Black,
+                shape = RoundedCornerShape(12.dp)
+            )
             .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        profileInfo()
+        TextButton(
+            onClick = {
+                promptManager.showBiometricPrompt(
+                    title = "Authenticate",
+                    description = "Please, identify yourself"
+                )
+            }
         ) {
-            Text(
-                text = reminder.title,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = reminder.description,
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Text(
-                text = dateFormat.format(Date(reminder.dateTime)),
-                style = MaterialTheme.typography.bodySmall
-            )
-            Button(
-                onClick = onDelete,
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                Text("Eliminar")
+            Text("Edit")
+        }
+        biometricResult?.let{
+                result ->
+            when(result){
+                is BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
+                    if (navController.currentDestination?.route != "profile") {
+                        navController.navigate("profile")
+                    }
+                }
+                else ->{
+                }
             }
         }
+    }
+}
+@Composable
+fun profileInfo(){
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Icon(
+            imageVector = Icons.Filled.AccountCircle,
+            contentDescription = "Profile icon",
+            modifier=Modifier.size(50.dp)
+        )
+        Text(
+            "Profile",
+            modifier = Modifier.padding(horizontal = 10.dp),
+            fontSize = 18.sp
+        )
     }
 }

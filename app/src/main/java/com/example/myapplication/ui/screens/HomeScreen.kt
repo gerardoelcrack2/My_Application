@@ -1,17 +1,24 @@
 package com.example.myapplication.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,26 +32,27 @@ import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapplication.R
+import com.example.myapplication.data.controller.ServiceViewModel
 import com.example.myapplication.data.model.ServiceModel
 import com.example.myapplication.ui.components.ServiceCard
+import com.example.myapplication.ui.components.ServiceDetailCard
 import com.example.myapplication.ui.components.TopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, ServiceViewModel = viewModel()) {
+fun HomeScreen(navController: NavController, viewModel: ServiceViewModel = viewModel()) {
     var serviceDetail by remember { mutableStateOf<ServiceModel?>(null) }
-    var sheetState = rememberModalBottomSheetState(
+    val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
     )
     var showBottomSheet by remember { mutableStateOf(false) }
     Scaffold(
-        topBar = { TopBar("Password Manager, navController, false") },
+        topBar = { TopBar("Password Manager", navController, false) },
         bottomBar = {
-            BottomBar(
+            BottomAppBar(
                 containerColor = Color.Black,
                 contentColor = Color.White,
-            ) {
-            }
+            ) {}
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -52,12 +60,12 @@ fun HomeScreen(navController: NavController, ServiceViewModel = viewModel()) {
                 contentColor = Color.Black,
                 onClick = {
                     navController.navigate("manage-service/0")
-                }) {
-                Icon(Icons.Filled.Add, contentDescription = "Add")
+                }
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }
     ) { innerPadding ->
-        // BottomSheet Content
         var services by remember { mutableStateOf<List<ServiceModel>>(emptyList()) }
         if (services.isEmpty()) {
             CircularProgressIndicator()
@@ -76,13 +84,12 @@ fun HomeScreen(navController: NavController, ServiceViewModel = viewModel()) {
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
-                .background(colorResource(R.color.dark86))
+                .background(colorResource(R.color.black))
                 .fillMaxSize(),
             state = listState
         ) {
             items(services) { service ->
-                ServiceCard(
-                    service.id, service.name, service.username, service.imageURL,
+                ServiceCard(service.id, service.name, service.username, service.imageURL,
                     onButtonClick = {
                         viewModel.showServices(service.id) { response ->
                             if (response.isSuccessful) {
@@ -90,6 +97,29 @@ fun HomeScreen(navController: NavController, ServiceViewModel = viewModel()) {
                             }
                         }
                         showBottomSheet = true
+                    }
+                )
+            }
+        }
+        if (showBottomSheet) {
+            ModalBottomSheet (
+                containerColor = colorResource(R.color.borderCard),
+                contentColor = Color.Black,
+                modifier = Modifier.fillMaxHeight(),
+                onDismissRequest = {
+                    showBottomSheet = false
+                }
+            ) {
+                ServiceDetailCard(
+                    serviceDetail?.id ?: 0,
+                    serviceDetail?.name ?: "",
+                    serviceDetail?.username ?: "",
+                    serviceDetail?.password ?: "",
+                    serviceDetail?.description ?: "",
+                    serviceDetail?.imageURL ?: "",
+                    onEditClick = {
+                        showBottomSheet = false
+                        navController.navigate("manage-service/" + serviceDetail?.id)
                     }
                 )
             }

@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="purpleA72AF7">#A72AF7</color>
+    <color name="primary_button">#AAA</color>
+    <color name="dark86">#F000</color>
 </resources>

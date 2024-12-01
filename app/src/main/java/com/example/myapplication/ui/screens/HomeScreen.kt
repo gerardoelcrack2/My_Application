@@ -99,7 +99,7 @@ fun HomeScreen(navController: NavController, viewModel: ServiceViewModel = viewM
             }
         }
         if (showBottomSheet) {
-            ModalBottomSheet (
+            ModalBottomSheet(
                 containerColor = colorResource(R.color.borderCard),
                 contentColor = Color.Black,
                 modifier = Modifier.fillMaxHeight(),
